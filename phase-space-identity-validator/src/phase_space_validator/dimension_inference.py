@@ -106,11 +106,14 @@ class DimensionRegistry:
             ) from exc
 
 
-@dataclass(frozen=True)
 class DimensionInferenceError(ValueError):
-    code: str
-    path: str
-    message: str
+    """Path-aware failure produced by recursive dimension inference."""
+
+    def __init__(self, code: str, path: str, message: str) -> None:
+        super().__init__(message)
+        self.code = code
+        self.path = path
+        self.message = message
 
     def __str__(self) -> str:
         return f"{self.code} at {self.path}: {self.message}"

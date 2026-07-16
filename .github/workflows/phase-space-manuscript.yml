@@ -1,0 +1,62 @@
+name: Phase-space manuscript
+
+on:
+  push:
+    paths:
+      - "phase-space-identity-validator/manuscript/**"
+      - ".github/workflows/phase-space-manuscript.yml"
+  pull_request:
+    paths:
+      - "phase-space-identity-validator/manuscript/**"
+      - ".github/workflows/phase-space-manuscript.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-manuscript:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install TeX toolchain
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            biber \
+            latexmk \
+            lmodern \
+            poppler-utils \
+            texlive-bibtex-extra \
+            texlive-fonts-recommended \
+            texlive-latex-extra
+
+      - name: Build PDF
+        working-directory: phase-space-identity-validator/manuscript
+        run: make
+
+      - name: Verify PDF and LaTeX log
+        working-directory: phase-space-identity-validator/manuscript
+        run: |
+          test -s phase_space_clarification.pdf
+          pages="$(pdfinfo phase_space_clarification.pdf | awk '/^Pages:/ {print $2}')"
+          test "${pages:-0}" -gt 0
+          if grep -Eq 'LaTeX Warning|Overfull \\hbox|undefined references|Citation .* undefined' phase_space_clarification.log; then
+            echo "Manuscript log contains unresolved warnings or layout overflow."
+            grep -En 'LaTeX Warning|Overfull \\hbox|undefined references|Citation .* undefined' phase_space_clarification.log
+            exit 1
+          fi
+          pdfinfo phase_space_clarification.pdf
+
+      - name: Upload manuscript PDF
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase-space-clarification-pdf
+          path: phase-space-identity-validator/manuscript/phase_space_clarification.pdf
+          if-no-files-found: error
+          retention-days: 30

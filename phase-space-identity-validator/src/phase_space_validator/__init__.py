@@ -38,6 +38,17 @@ from .expressions import (
     walk_expression,
 )
 from .models import IdentitySpec, MathematicalObject, ValidationIssue, ValidationReport
+from .symbolic_counterexample import (
+    DEFAULT_SYMBOLIC_CONTEXT,
+    CounterexampleResult,
+    EvidenceLevel,
+    SymbolicContext,
+    SymbolicCounterexampleError,
+    apply_mixed_cross_gradient,
+    expression_to_sympy,
+    falsify_equality,
+    generate_bilinear_candidates,
+)
 from .tensor_inference import (
     DEFAULT_TENSOR_CONTEXT,
     DEFAULT_TENSOR_REGISTRY,
@@ -59,6 +70,7 @@ from .validator import validate_identity
 __all__ = [
     "ACTION",
     "DEFAULT_REGISTRY",
+    "DEFAULT_SYMBOLIC_CONTEXT",
     "DEFAULT_TENSOR_CONTEXT",
     "DEFAULT_TENSOR_REGISTRY",
     "INVERSE_ACTION",
@@ -68,6 +80,7 @@ __all__ = [
     "TIME",
     "Commutator",
     "Constant",
+    "CounterexampleResult",
     "CrossProduct",
     "Derivative",
     "Dimension",
@@ -75,6 +88,7 @@ __all__ = [
     "DimensionInferenceError",
     "DimensionRegistry",
     "Equality",
+    "EvidenceLevel",
     "Expression",
     "ExpressionParseError",
     "Gradient",
@@ -86,6 +100,8 @@ __all__ = [
     "Product",
     "Sum",
     "Symbol",
+    "SymbolicContext",
+    "SymbolicCounterexampleError",
     "TensorAnalysis",
     "TensorCheckReport",
     "TensorContext",
@@ -99,11 +115,15 @@ __all__ = [
     "ValidationReport",
     "WedgeProduct",
     "analyze_tensor",
+    "apply_mixed_cross_gradient",
     "check_equality_dimensions",
     "check_equality_tensors",
     "expression_depth",
     "expression_from_dict",
     "expression_from_json",
+    "expression_to_sympy",
+    "falsify_equality",
+    "generate_bilinear_candidates",
     "infer_dimension",
     "load_expression",
     "signatures_compatible",
@@ -111,4 +131,4 @@ __all__ = [
     "walk_expression",
 ]
 
-__version__ = "0.4.0"
+__version__ = "0.5.0"

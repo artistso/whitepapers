@@ -5,13 +5,14 @@ type: software
 authors:
   - family-names: Owens
     given-names: Lovely
-version: 0.2.0
+version: 0.3.0
 date-released: 2026-07-15
 license: MIT
 repository-code: https://github.com/artistso/whitepapers
 keywords:
   - phase space
   - expression AST
+  - dimension inference
   - dimensional analysis
   - symplectic geometry
   - quantum mechanics

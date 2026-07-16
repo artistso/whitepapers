@@ -1,0 +1,1 @@
+nabla_x cross nabla_p = hbar^2 / (2*pi)

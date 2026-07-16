@@ -4,13 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "phase-space-identity-validator"
-version = "0.3.0"
-description = "A controlled expression, dimension inference, and structural validation toolkit for phase-space identities."
+version = "0.4.0"
+description = "A controlled expression, dimension, tensor-index, and structural validation toolkit for phase-space identities."
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
 authors = [{ name = "Lovely Owens" }]
-keywords = ["physics", "phase-space", "symplectic-geometry", "dimensional-analysis", "quantum-mechanics"]
+keywords = ["physics", "phase-space", "symplectic-geometry", "dimensional-analysis", "tensor-analysis", "quantum-mechanics"]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Intended Audience :: Science/Research",
@@ -28,6 +28,8 @@ dev = ["pytest>=8.2", "ruff>=0.5"]
 psiv = "phase_space_validator.cli:main"
 psiv-ast = "phase_space_validator.ast_cli:main"
 psiv-dim = "phase_space_validator.dimension_cli:main"
+psiv-tensor = "phase_space_validator.tensor_cli:main"
+psiv-check = "phase_space_validator.check_cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -38,7 +40,7 @@ testpaths = ["tests"]
 
 [tool.ruff]
 target-version = "py311"
-line-length = 100
+line-length = 105
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP"]

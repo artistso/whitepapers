@@ -8,28 +8,28 @@ The initial motivating example is the invalid ansatz
 nabla_x cross nabla_p = hbar^2 / (2 pi)
 ```
 
-The toolkit now rejects this identity in two independent ways:
+The toolkit now rejects this identity through independent metadata, dimensional, and tensor-index analyses:
 
-1. the metadata validator detects tensor, operator/value, domain, covariance, and declared-dimension mismatches;
-2. the AST dimension engine derives inverse action on the left and action squared on the right.
+1. the metadata validator detects declared rank, operator/value, domain, covariance, and dimension mismatches;
+2. the AST dimension engine derives inverse action on the left and action squared on the right;
+3. the tensor engine derives a rank-one left side and scalar right side, while also identifying that `nabla_x` and `nabla_p` belong to different coordinate spaces.
 
 > **Scope:** this toolkit is a consistency checker, not a theorem prover. Parsing or passing validation does not establish that an equation is mathematically or physically true.
 
-## Capabilities in v0.3.0
+## Capabilities in v0.4.0
 
 - strict controlled expression AST;
 - JSON round-trip normalization;
 - path-aware errors for malformed expression trees;
-- deterministic traversal, node counts, and tree depth;
 - recursive physical-dimension inference;
-- configurable symbol and coordinate registries;
-- equality dimension reports with stable diagnostic codes;
-- tensor rank checks from declared metadata;
-- operator-versus-value checks;
-- differential-order diagnostics;
-- intrinsic/covariant status checks;
-- domain compatibility checks;
-- distributional qualification warnings.
+- tensor-rank and free-index inference;
+- covariant and contravariant index tokens;
+- Einstein contraction checks;
+- Kronecker-delta contraction support;
+- cross-product rank, vector-space, and 3D restrictions;
+- combined dimension and tensor reports;
+- configurable symbol, coordinate, and tensor registries;
+- metadata checks for properties not yet inferable from syntax.
 
 ## Quick start
 
@@ -41,22 +41,35 @@ python -m pip install -e '.[dev]'
 psiv examples/invalid-cross-gradient.json
 psiv-ast examples/ast/invalid-cross-gradient-expression.json --summary
 psiv-dim examples/ast/invalid-cross-gradient-expression.json
-psiv-dim examples/ast/canonical-commutator-expression.json
+psiv-tensor examples/ast/invalid-cross-gradient-expression.json
+psiv-check examples/ast/invalid-cross-gradient-expression.json
 pytest
 ```
 
-The motivating AST produces:
+The combined checker reports at least:
 
 ```text
-left:  M^-1 L^-2 T
-right: M^2 L^4 T^-2
-code:  DIMENSION_MISMATCH
+DIMENSION_MISMATCH
+TYPE_RANK_MISMATCH
+CROSS_PRODUCT_SPACE_MISMATCH
 ```
 
-The canonical commutator produces action dimensions on both sides:
+The canonical commutator passes both dimension and tensor checks:
+
+```bash
+psiv-check examples/ast/canonical-commutator-expression.json
+```
+
+The Kronecker example verifies an explicit contraction:
+
+```bash
+psiv-check examples/ast/kronecker-contraction-expression.json
+```
+
+representing
 
 ```text
-M L^2 T^-1
+delta^i_j x^j = x^i
 ```
 
 ## Controlled expression language
@@ -95,21 +108,25 @@ nabla_p -> M^-1 L^-1 T
 
 Inference is recursive across derivatives, gradients, products, integer powers, sums, cross products, tensor products, wedge products, commutators, Poisson brackets, and equalities.
 
-Stable dimension errors include:
+The complete rules are documented in `docs/DIMENSION_INFERENCE.md`.
+
+## Tensor and index inference
+
+Indices use compact tokens:
 
 ```text
-UNKNOWN_SYMBOL
-UNKNOWN_COORDINATE
-INCOMPATIBLE_SUM
-DIMENSION_MISMATCH
-UNSUPPORTED_NODE
+_i   covariant
+^i   contravariant
+i    covariant legacy form
 ```
 
-The complete inference rules are documented in `docs/DIMENSION_INFERENCE.md`.
+A repeated index contracts only when it appears exactly twice in the same vector space with opposite variance. The checker detects same-variance repetition, excessive multiplicity, free-index mismatch, invalid tensor powers, incompatible tensor sums, and invalid cross products.
+
+The complete rules are documented in `docs/TENSOR_INFERENCE.md`.
 
 ## Metadata validation
 
-The original metadata validator remains available for properties that cannot yet be inferred from syntax alone:
+The original metadata validator remains available for properties not yet inferred from syntax alone:
 
 ```text
 TYPE_RANK_MISMATCH
@@ -139,7 +156,7 @@ phase-space-identity-validator/
 └── LICENSE.md
 ```
 
-The validator workflow runs Ruff and pytest under Python 3.11 and 3.12.
+The validator workflow runs Ruff and pytest under Python 3.11 and 3.12 and retains JUnit artifacts for diagnostics.
 
 ## Technical note
 
@@ -160,4 +177,4 @@ The manuscript workflow compiles and verifies the PDF on GitHub Actions and uplo
 
 ## Roadmap
 
-The next research phases are tensor-index validation, symbolic counterexample generation, a controlled text/LaTeX front end, Jacobi identity checks, and catalogs for magnetic and Berry-curved phase spaces.
+The next research phases are symbolic counterexample generation, a controlled text/LaTeX front end, metric-aware index operations, Jacobi identity checks, and catalogs for magnetic and Berry-curved phase spaces.

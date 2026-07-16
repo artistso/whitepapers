@@ -8,27 +8,34 @@ The initial motivating example is the invalid ansatz
 nabla_x cross nabla_p = hbar^2 / (2 pi)
 ```
 
-The toolkit now rejects this identity through independent metadata, dimensional, and tensor-index analyses:
+The toolkit rejects this identity through independent metadata, dimensional, and tensor-index analyses:
 
 1. the metadata validator detects declared rank, operator/value, domain, covariance, and dimension mismatches;
 2. the AST dimension engine derives inverse action on the left and action squared on the right;
-3. the tensor engine derives a rank-one left side and scalar right side, while also identifying that `nabla_x` and `nabla_p` belong to different coordinate spaces.
+3. the tensor engine derives a rank-one left side and scalar right side and identifies that `nabla_x` and `nabla_p` belong to different coordinate spaces.
 
-> **Scope:** this toolkit is a consistency checker, not a theorem prover. Parsing or passing validation does not establish that an equation is mathematically or physically true.
+It also symbolically disproves the related universal claim
 
-## Capabilities in v0.4.0
+```text
+nabla_x cross nabla_p = 0
+```
+
+by finding the witness `x1*p2`, for which the operator returns `(0, 0, 1)`.
+
+> **Scope:** this toolkit is a consistency checker and counterexample search system, not a theorem prover. Parsing, passing validation, or failing to find a counterexample does not establish that an equation is mathematically or physically true.
+
+## Capabilities in v0.5.0
 
 - strict controlled expression AST;
-- JSON round-trip normalization;
-- path-aware errors for malformed expression trees;
 - recursive physical-dimension inference;
 - tensor-rank and free-index inference;
-- covariant and contravariant index tokens;
-- Einstein contraction checks;
+- variance-aware Einstein contraction;
 - Kronecker-delta contraction support;
 - cross-product rank, vector-space, and 3D restrictions;
 - combined dimension and tensor reports;
-- configurable symbol, coordinate, and tensor registries;
+- exact symbolic differentiation and simplification with SymPy;
+- deterministic low-degree counterexample search;
+- explicit evidence levels distinguishing falsification from inconclusive search;
 - metadata checks for properties not yet inferable from syntax.
 
 ## Quick start
@@ -43,6 +50,7 @@ psiv-ast examples/ast/invalid-cross-gradient-expression.json --summary
 psiv-dim examples/ast/invalid-cross-gradient-expression.json
 psiv-tensor examples/ast/invalid-cross-gradient-expression.json
 psiv-check examples/ast/invalid-cross-gradient-expression.json
+psiv-falsify examples/ast/cross-gradient-zero-expression.json
 pytest
 ```
 
@@ -54,43 +62,38 @@ TYPE_RANK_MISMATCH
 CROSS_PRODUCT_SPACE_MISMATCH
 ```
 
-The canonical commutator passes both dimension and tensor checks:
+The falsifier reports:
+
+```text
+[COUNTEREXAMPLE] universal claim falsified
+- witness:      p2*x1
+- left action:  ('0', '0', '1')
+- right action: ('0', '0', '0')
+- residual:     ('0', '0', '1')
+- tested:       2 candidate(s)
+```
+
+The canonical commutator passes dimension and tensor checks:
 
 ```bash
 psiv-check examples/ast/canonical-commutator-expression.json
 ```
 
-The Kronecker example verifies an explicit contraction:
-
-```bash
-psiv-check examples/ast/kronecker-contraction-expression.json
-```
-
-representing
+The Kronecker example verifies
 
 ```text
 delta^i_j x^j = x^i
 ```
 
+with:
+
+```bash
+psiv-check examples/ast/kronecker-contraction-expression.json
+```
+
 ## Controlled expression language
 
-The expression layer represents syntax without silently assigning physical meaning. Supported nodes include:
-
-```text
-Symbol
-Constant
-Derivative
-Gradient
-CrossProduct
-TensorProduct
-WedgeProduct
-Commutator
-PoissonBracket
-Power
-Product
-Sum
-Equality
-```
+The expression layer represents syntax without silently assigning physical meaning. Supported nodes include symbols, constants, derivatives, gradients, cross products, tensor products, wedge products, commutators, Poisson brackets, powers, products, sums, and equalities.
 
 The complete grammar is documented in `docs/EXPRESSION_AST.md`.
 
@@ -106,8 +109,6 @@ nabla_x -> L^-1
 nabla_p -> M^-1 L^-1 T
 ```
 
-Inference is recursive across derivatives, gradients, products, integer powers, sums, cross products, tensor products, wedge products, commutators, Poisson brackets, and equalities.
-
 The complete rules are documented in `docs/DIMENSION_INFERENCE.md`.
 
 ## Tensor and index inference
@@ -120,9 +121,13 @@ _i   covariant
 i    covariant legacy form
 ```
 
-A repeated index contracts only when it appears exactly twice in the same vector space with opposite variance. The checker detects same-variance repetition, excessive multiplicity, free-index mismatch, invalid tensor powers, incompatible tensor sums, and invalid cross products.
+A repeated index contracts only when it appears exactly twice in the same vector space with opposite variance. The complete rules are documented in `docs/TENSOR_INFERENCE.md`.
 
-The complete rules are documented in `docs/TENSOR_INFERENCE.md`.
+## Symbolic counterexamples
+
+The v0.5 falsifier supports universal mixed cross-gradient claims against zero. It searches the nine deterministic bilinear witnesses `x_i p_j` and uses exact symbolic differentiation. A found witness disproves the claim; `NO_COUNTEREXAMPLE_FOUND` means only that the configured finite search space was exhausted.
+
+The full scope and evidence semantics are documented in `docs/SYMBOLIC_COUNTEREXAMPLES.md`.
 
 ## Metadata validation
 
@@ -142,10 +147,10 @@ DISTRIBUTIONAL_QUALIFICATION
 
 ```text
 phase-space-identity-validator/
-├── src/phase_space_validator/   # AST, inference, validation, and CLIs
+├── src/phase_space_validator/   # AST, inference, falsification, validation, and CLIs
 ├── tests/                       # unit tests
 ├── examples/                    # metadata and AST examples
-├── docs/                        # grammar, inference, scope, and roadmap
+├── docs/                        # grammar, inference, falsification, scope, and roadmap
 ├── manuscript/                  # modular technical-note source
 │   ├── sections/
 │   ├── phase_space_clarification.tex
@@ -156,7 +161,7 @@ phase-space-identity-validator/
 └── LICENSE.md
 ```
 
-The validator workflow runs Ruff and pytest under Python 3.11 and 3.12 and retains JUnit artifacts for diagnostics.
+The validator workflow runs Ruff and pytest under Python 3.11 and 3.12 and retains Ruff and JUnit artifacts for diagnostics.
 
 ## Technical note
 
@@ -164,7 +169,7 @@ The accompanying paper is:
 
 > **Mixed Derivatives in Phase Space: Poisson Geometry, Quantum Commutators, and Quantized Circulation**
 
-It formalizes the distinction between commuting mixed derivatives, the generally nonzero formal mixed cross-gradient, Poisson geometry, quantum commutators, and quantized circulation. A dedicated table maps the motivating ansatz to the validator's stable diagnostic codes.
+It formalizes the distinction between commuting mixed derivatives, the generally nonzero formal mixed cross-gradient, Poisson geometry, quantum commutators, and quantized circulation.
 
 Build it locally with:
 
@@ -173,8 +178,8 @@ cd manuscript
 make
 ```
 
-The manuscript workflow compiles and verifies the PDF on GitHub Actions and uploads `phase-space-clarification-pdf` as a workflow artifact. Generated PDFs are not committed to the repository.
+The manuscript workflow compiles and verifies the PDF on GitHub Actions and uploads `phase-space-clarification-pdf` as a workflow artifact.
 
 ## Roadmap
 
-The next research phases are symbolic counterexample generation, a controlled text/LaTeX front end, metric-aware index operations, Jacobi identity checks, and catalogs for magnetic and Berry-curved phase spaces.
+The next research phases are a controlled text/LaTeX front end, broader polynomial witness generation, metric-aware index operations, Jacobi identity checks, and catalogs for magnetic and Berry-curved phase spaces.

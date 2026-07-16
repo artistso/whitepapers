@@ -1,0 +1,38 @@
+{
+  "type": "equality",
+  "left": {
+    "type": "commutator",
+    "left": {
+      "type": "symbol",
+      "name": "x",
+      "indices": ["i"]
+    },
+    "right": {
+      "type": "symbol",
+      "name": "p",
+      "indices": ["j"]
+    }
+  },
+  "right": {
+    "type": "product",
+    "factors": [
+      {
+        "type": "constant",
+        "value": "i"
+      },
+      {
+        "type": "symbol",
+        "name": "hbar"
+      },
+      {
+        "type": "symbol",
+        "name": "delta",
+        "indices": ["i", "j"]
+      },
+      {
+        "type": "symbol",
+        "name": "I"
+      }
+    ]
+  }
+}

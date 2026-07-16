@@ -1,0 +1,44 @@
+{
+  "type": "equality",
+  "left": {
+    "type": "cross_product",
+    "left": {
+      "type": "gradient",
+      "space": "x"
+    },
+    "right": {
+      "type": "gradient",
+      "space": "p"
+    }
+  },
+  "right": {
+    "type": "product",
+    "factors": [
+      {
+        "type": "power",
+        "base": {
+          "type": "symbol",
+          "name": "hbar"
+        },
+        "exponent": 2
+      },
+      {
+        "type": "power",
+        "base": {
+          "type": "product",
+          "factors": [
+            {
+              "type": "constant",
+              "value": 2
+            },
+            {
+              "type": "constant",
+              "value": "pi"
+            }
+          ]
+        },
+        "exponent": -1
+      }
+    ]
+  }
+}

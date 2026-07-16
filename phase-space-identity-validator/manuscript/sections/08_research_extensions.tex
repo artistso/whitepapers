@@ -1,0 +1,49 @@
+\section{Research extensions}
+
+The correction itself is expository. A genuine research program can begin by extending the diagnostic framework beyond canonical flat phase space.
+
+\subsection{Noncanonical Poisson manifolds}
+
+For general local coordinates \(z^a\), let
+\begin{equation}
+\pb{z^a}{z^b}=\Pi^{ab}(z),
+\end{equation}
+where \(\Pi^{ab}\) is an antisymmetric Poisson tensor satisfying the Jacobi identity. A deformation quantization has the local form
+\begin{equation}
+f\star g
+=fg+\frac{\ii\hbar}{2}\Pi^{ab}(z)
+\partial_a f\,\partial_b g+O(\hbar^2),
+\end{equation}
+and hence
+\begin{equation}
+\starcomm{f}{g}
+=
+\ii\hbar\pb{f}{g}+O(\hbar^2).
+\label{eq:generalstar}
+\end{equation}
+Unlike the canonical Moyal product, higher-order terms can depend on derivatives of \(\Pi^{ab}(z)\) and on the chosen equivalent star-product representative.
+
+\subsection{Magnetic, constrained, and curved phase spaces}
+
+Several extensions are mathematically substantive:
+\begin{itemize}
+  \item magnetic symplectic forms, in which field-strength terms modify the canonical two-form and momentum brackets;
+  \item constrained Hamiltonian systems, where Dirac brackets replace canonical Poisson brackets;
+  \item Berry-curvature corrections in semiclassical dynamics;
+  \item cotangent bundles over curved configuration manifolds;
+  \item noncommutative coordinate algebras and deformation-quantized Poisson manifolds.
+\end{itemize}
+These settings make clear why no fixed cross-gradient rule can replace the underlying geometric data.
+
+\subsection{Symbolic consistency checking}
+
+A practical computational contribution would be an automated checker that accepts a proposed identity and reports:
+\begin{enumerate}[label=(\alph*)]
+  \item tensor-rank and scalar/vector mismatches;
+  \item incompatible physical dimensions;
+  \item undefined cross products outside three dimensions;
+  \item confusion between commutators, wedge products, and curls;
+  \item missing operator-ordering prescriptions;
+  \item omitted singular or gauge terms.
+\end{enumerate}
+Such a tool would convert the present conceptual taxonomy into a reproducible method for screening speculative phase-space formulae.

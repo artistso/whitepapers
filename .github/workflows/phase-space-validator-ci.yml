@@ -1,0 +1,32 @@
+name: Phase-space validator CI
+
+on:
+  push:
+    paths:
+      - "phase-space-identity-validator/**"
+      - ".github/workflows/phase-space-validator-ci.yml"
+  pull_request:
+    paths:
+      - "phase-space-identity-validator/**"
+      - ".github/workflows/phase-space-validator-ci.yml"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install
+        working-directory: phase-space-identity-validator
+        run: python -m pip install -e '.[dev]'
+      - name: Lint
+        working-directory: phase-space-identity-validator
+        run: ruff check .
+      - name: Test
+        working-directory: phase-space-identity-validator
+        run: pytest

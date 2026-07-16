@@ -81,13 +81,34 @@ phase-space-identity-validator/
 ├── tests/                       # unit tests
 ├── examples/                    # valid and invalid identity specifications
 ├── docs/                        # mathematical scope and roadmap
-├── manuscript/                  # technical-note source
+├── manuscript/                  # modular technical-note source
+│   ├── sections/
+│   ├── phase_space_clarification.tex
+│   ├── references.bib
+│   └── Makefile
 ├── pyproject.toml
 ├── CITATION.cff
 └── LICENSE.md
 ```
 
-The repository-level GitHub Actions workflow runs Ruff and pytest under Python 3.11 and 3.12.
+The repository-level validator workflow runs Ruff and pytest under Python 3.11 and 3.12.
+
+## Technical note
+
+The accompanying paper is:
+
+> **Mixed Derivatives in Phase Space: Poisson Geometry, Quantum Commutators, and Quantized Circulation**
+
+It formalizes the distinction between commuting mixed derivatives, the generally nonzero formal mixed cross-gradient, Poisson geometry, quantum commutators, and quantized circulation. A dedicated table maps the motivating ansatz to the validator's stable diagnostic codes.
+
+Build it locally with:
+
+```bash
+cd manuscript
+make
+```
+
+The manuscript workflow compiles and verifies the PDF on GitHub Actions and uploads `phase-space-clarification-pdf` as a workflow artifact. Generated PDFs are not committed to the repository.
 
 ## Mathematical foundation
 
@@ -102,4 +123,4 @@ The accompanying research program distinguishes:
 
 ## Roadmap
 
-The next research phases are controlled LaTeX parsing, automatic dimension inference, tensor-index validation, symbolic counterexample generation, Jacobi identity checks, and catalogs for magnetic and Berry-curved phase spaces.
+The next research phases are controlled expression parsing, automatic dimension inference, tensor-index validation, symbolic counterexample generation, Jacobi identity checks, and catalogs for magnetic and Berry-curved phase spaces.

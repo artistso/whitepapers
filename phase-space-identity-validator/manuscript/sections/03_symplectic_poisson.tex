@@ -1,0 +1,58 @@
+\section{The intrinsic classical structure: symplectic and Poisson geometry}
+
+For a configuration manifold \(Q\), the canonical phase space is its cotangent bundle \(T^*Q\). This standard construction is reviewed in Ref.~\cite{RoubtsovDutykh}. In local canonical coordinates \((x^i,p_i)\), the canonical one-form is
+\begin{equation}
+\theta=p_i\,\dd x^i,
+\end{equation}
+and the canonical symplectic form is
+\begin{equation}
+\boxed{
+\omega=-\dd\theta=\dd x^i\wedge\dd p_i.
+}
+\label{eq:symplectic}
+\end{equation}
+Repeated indices are summed. The inverse of \(\omega\), understood as a bivector, is the canonical Poisson tensor
+\begin{equation}
+\boxed{
+\Pi
+=
+\frac{\partial}{\partial x^i}
+\wedge
+\frac{\partial}{\partial p_i}.
+}
+\label{eq:poisson-bivector}
+\end{equation}
+It acts on differentials of observables to define the Poisson bracket
+\begin{equation}
+\boxed{
+\pb{f}{g}
+=
+\Pi(\dd f,\dd g)
+=
+\frac{\partial f}{\partial x^i}
+\frac{\partial g}{\partial p_i}
+-
+\frac{\partial f}{\partial p_i}
+\frac{\partial g}{\partial x^i}.
+}
+\label{eq:poisson}
+\end{equation}
+In particular,
+\begin{equation}
+\boxed{
+\pb{x^i}{p_j}=\delta^i{}_j,
+\qquad
+\pb{x^i}{x^j}=0,
+\qquad
+\pb{p_i}{p_j}=0.
+}
+\label{eq:canonical-pb}
+\end{equation}
+
+This is the invariant mathematical structure that the cross-gradient ansatz most closely resembles. The wedge product in Eq.~\eqref{eq:poisson-bivector} is antisymmetric, but it is not a three-dimensional vector cross product. It defines a bilinear bracket on observables rather than a universal constant-valued differential operator.
+
+The dimensional bookkeeping is also natural. The symplectic form has dimensions of action, so
+\begin{equation}
+\frac{\omega}{\hbar}
+\end{equation}
+is dimensionless. Its inverse \(\Pi\) has dimensions of inverse action, so \(\hbar\Pi\) is dimensionless. This is a legitimate sense in which \(\hbar\) sets the scale of phase-space geometry; it does not imply that every antisymmetric phase-space expression equals a power of \(\hbar\).

@@ -1,0 +1,83 @@
+\section{Quantum noncommutativity}
+
+\subsection{Canonical operator quantization}
+
+Canonical quantization associates position and momentum observables with operators satisfying
+\begin{equation}
+\boxed{
+\comm{\hat x^i}{\hat p_j}
+=
+\ii\hbar\,\delta^i{}_j.
+}
+\label{eq:ccr}
+\end{equation}
+In the position representation,
+\begin{equation}
+\hat p_j=-\ii\hbar\frac{\partial}{\partial x^j},
+\end{equation}
+so derivatives are present, but the relevant antisymmetric operation is the operator commutator. Equation~\eqref{eq:ccr} is not obtained by taking a cross product of \(\nabla_{\bm{x}}\) and \(\nabla_{\bm{p}}\).
+
+\subsection{Moyal deformation in phase space}
+
+The phase-space formulation makes the bridge especially explicit \cite{Groenewold,Moyal,Zachos}. For canonical coordinates, define the Moyal star product by
+\begin{equation}
+\boxed{
+(f\star g)(x,p)
+=
+f(x,p)
+\exp\!\left[
+\frac{\ii\hbar}{2}
+\left(
+\overleftarrow{\partial}_{x^i}
+\overrightarrow{\partial}_{p_i}
+-
+\overleftarrow{\partial}_{p_i}
+\overrightarrow{\partial}_{x^i}
+\right)
+\right]
+g(x,p).
+}
+\label{eq:moyal}
+\end{equation}
+The corresponding star commutator is
+\begin{equation}
+\starcomm{f}{g}
+=f\star g-g\star f.
+\end{equation}
+For the canonical coordinate functions, Eq.~\eqref{eq:moyal} gives the exact identity
+\begin{equation}
+\boxed{
+\starcomm{x^i}{p_j}
+=
+\ii\hbar\delta^i{}_j.
+}
+\label{eq:starccr}
+\end{equation}
+For general observables,
+\begin{equation}
+\frac{1}{\ii\hbar}\starcomm{f}{g}
+=
+\pb{f}{g}+O(\hbar^2)
+\label{eq:classical-limit}
+\end{equation}
+for the canonical Moyal product. Thus the correct derivative expression contains the Poisson bidifferential operator inside an exponential deformation of the pointwise product. This is much closer to the physical intuition behind Eq.~\eqref{eq:bad} than either a vanishing cross product or an arbitrary constant assignment.
+
+\subsection{Why higher powers of \texorpdfstring{\(\hbar\)}{hbar} cannot be prohibited}
+
+No valid universal rule restricts quantum identities to a first power of \(\hbar\). The correct power is fixed by dimensions and by the mathematical operation. Standard examples include
+\begin{equation}
+\hat{\bm{p}}^{\,2}=-\hbar^2\nabla^2,
+\end{equation}
+\begin{equation}
+\hat L^2\lvert \ell m\rangle
+=
+\hbar^2\ell(\ell+1)\lvert \ell m\rangle,
+\end{equation}
+and
+\begin{equation}
+(\Delta x)^2(\Delta p)^2\geq\frac{\hbar^2}{4}.
+\end{equation}
+Higher powers also arise systematically in semiclassical and deformation expansions. The defensible rule is therefore:
+\begin{quote}
+The appearance and power of \(\hbar\) must follow from the dimensions, algebra, ordering prescription, and physical model; it cannot be imposed by a universal normalization convention.
+\end{quote}

@@ -1,0 +1,90 @@
+\section{Diagnosis of the mixed cross-gradient ansatz}
+
+\subsection{What does commute}
+
+Let the canonical phase-space coordinates be
+\[
+(\bm{x},\bm{p})=(x^1,\ldots,x^d,p_1,\ldots,p_d)
+\]
+on an open domain in \(\R^{2d}\). For a sufficiently smooth function \(f(\bm{x},\bm{p})\), Clairaut's theorem gives
+\begin{equation}
+\frac{\partial^2 f}{\partial x^i\partial p_j}
+=
+\frac{\partial^2 f}{\partial p_j\partial x^i}.
+\end{equation}
+Equivalently,
+\begin{equation}
+\boxed{
+\comm{\partial_{x^i}}{\partial_{p_j}}=0.
+}
+\label{eq:mixedcommute}
+\end{equation}
+Equation~\eqref{eq:mixedcommute} is the correct zero identity for independent Cartesian phase-space coordinates.
+
+\subsection{Why the cross product does not vanish}
+
+Only when \(d=3\), after choosing coordinate bases and identifying both gradient triples with ordinary Euclidean vectors, can one formally write
+\begin{equation}
+\left(\nabla_{\bm{x}}\times\nabla_{\bm{p}}\right)_i
+=
+\epsilon_{ijk}\,
+\partial_{x^j}\partial_{p_k}.
+\label{eq:formal-cross}
+\end{equation}
+Commutation of \(\partial_{x^j}\) with \(\partial_{p_k}\) does not force the antisymmetric contraction over different index pairs to vanish.
+
+\begin{proposition}
+The differential operator in Eq.~\eqref{eq:formal-cross} is generally nonzero.
+\end{proposition}
+
+\begin{proof}
+Take
+\[
+f(\bm{x},\bm{p})=x^1p_2.
+\]
+Then
+\begin{align}
+\left(\nabla_{\bm{x}}\times\nabla_{\bm{p}}\right)_3f
+&=
+\left(
+\partial_{x^1}\partial_{p_2}
+-
+\partial_{x^2}\partial_{p_1}
+\right)x^1p_2
+\\
+&=1.
+\end{align}
+Therefore \(\nabla_{\bm{x}}\times\nabla_{\bm{p}}\) is not the zero operator.
+\end{proof}
+
+This counterexample also exposes the conceptual error: the equality of two mixed derivatives with the \emph{same} index pair does not imply cancellation between different pairs.
+
+\subsection{Four independent defects in the ansatz}
+
+Equation~\eqref{eq:bad} fails for at least four reasons.
+
+\paragraph{1. It is not an operator identity.}
+The left-hand side is generally nonzero, as shown above, and its action depends on the function to which it is applied.
+
+\paragraph{2. It has a tensor-type mismatch.}
+The formal cross product is vector-valued, whereas \(\hbar^2/(2\pi)\) is a scalar. A direction or covariant tensorial construction has not been supplied.
+
+\paragraph{3. It is dimensionally inconsistent.}
+The mixed differential operator carries dimensions
+\begin{equation}
+\left[\partial_x\partial_p\right]
+=
+\frac{1}{LP}
+=
+\frac{1}{\text{action}},
+\end{equation}
+while
+\begin{equation}
+[\hbar^2]=(\text{action})^2.
+\end{equation}
+Multiplication by a numerical factor such as \(1/(2\pi)\) cannot repair the mismatch.
+
+\paragraph{4. It is not intrinsic to phase space.}
+A cross product is a special operation associated with oriented three-dimensional inner-product spaces. A canonical phase space has dimension \(2d\), and the position and momentum derivatives naturally belong to different coordinate directions on a cotangent bundle. No canonical cross product between them exists for general \(d\) or under general canonical coordinate transformations.
+
+The correct conclusion is therefore not that the left-hand side must be replaced by zero, but that no universal scalar equality of the form in Eq.~\eqref{eq:bad} is mathematically available.

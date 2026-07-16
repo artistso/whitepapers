@@ -1,0 +1,76 @@
+\documentclass[11pt]{article}
+
+\usepackage[letterpaper,margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{bm}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage[backend=biber,style=numeric,sorting=none]{biblatex}
+\addbibresource{references.bib}
+\AtBeginBibliography{\small}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  citecolor=black,
+  urlcolor=blue,
+  pdftitle={Mixed Derivatives in Phase Space: Poisson Geometry, Quantum Commutators, and Quantized Circulation},
+  pdfauthor={Lovely Owens}
+}
+
+\newtheorem{proposition}{Proposition}
+\newtheorem{remark}{Remark}
+\newcommand{\ii}{\mathrm{i}}
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\comm}[2]{\left[#1,#2\right]}
+\newcommand{\pb}[2]{\left\{#1,#2\right\}}
+\newcommand{\starcomm}[2]{\left[#1,#2\right]_{\star}}
+
+\title{\textbf{Mixed Derivatives in Phase Space:}\\
+Poisson Geometry, Quantum Commutators, and Quantized Circulation}
+\author{Lovely Owens}
+\date{15 July 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We analyze the dimensionally inconsistent ansatz
+\(
+\nabla_{\bm{x}}\times\nabla_{\bm{p}}=\hbar^2/(2\pi)
+\)
+and identify the distinct mathematical structures that it conflates. Commutation of the independent derivatives \(\partial_{x^i}\) and \(\partial_{p_j}\) does not imply that their formally defined three-dimensional cross product vanishes: the resulting second-order differential operator is generally nonzero. Moreover, such a cross product is not intrinsic to a general phase space, equates a vector operator with a scalar, and carries dimensions incompatible with \(\hbar^2\). The invariant classical structure is instead the canonical Poisson bivector
+\(
+\Pi=\sum_i \partial_{x^i}\wedge\partial_{p_i}
+\),
+which yields \(\{x^i,p_j\}=\delta^i{}_j\). Canonical quantization replaces this relation by \([\hat x^i,\hat p_j]=\ii\hbar\delta^i{}_j\), while deformation quantization realizes the same noncommutativity through the Moyal star product. We separately treat quantized circulation in quantum fluids and the angular-momentum algebra, demonstrating why neither is an identity for mixed phase-space gradients. The result is a coordinate-aware diagnostic framework for distinguishing commuting derivatives, antisymmetric phase-space geometry, quantum commutators, and distributional vorticity. This article is an expository clarification and does not claim a new physical law.
+\end{abstract}
+
+\input{sections/01_introduction.tex}
+
+\input{sections/02_diagnosis.tex}
+
+\input{sections/03_symplectic_poisson.tex}
+
+\input{sections/04_quantum_noncommutativity.tex}
+
+\input{sections/05_quantized_circulation.tex}
+
+\input{sections/06_angular_momentum.tex}
+
+\input{sections/07_diagnostic_dictionary.tex}
+
+\input{sections/08_research_extensions.tex}
+
+\input{sections/09_conclusion.tex}
+
+\printbibliography
+
+\end{document}

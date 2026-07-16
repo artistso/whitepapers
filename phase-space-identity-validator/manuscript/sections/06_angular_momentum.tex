@@ -1,0 +1,40 @@
+\section{Angular momentum: an operator cross product with an explicit definition}
+
+Orbital angular momentum is
+\begin{equation}
+\hat{\bm{L}}=\hat{\bm{x}}\times\hat{\bm{p}},
+\end{equation}
+and its components satisfy
+\begin{equation}
+\boxed{
+\comm{\hat L_i}{\hat L_j}
+=
+\ii\hbar\epsilon_{ijk}\hat L_k.
+}
+\label{eq:Lalgebra}
+\end{equation}
+If one explicitly defines the ordered operator cross product by
+\begin{equation}
+(\hat{\bm{L}}\times\hat{\bm{L}})_i
+:=
+\epsilon_{ijk}\hat L_j\hat L_k,
+\end{equation}
+then antisymmetry of \(\epsilon_{ijk}\) removes the anticommutator part:
+\begin{align}
+(\hat{\bm{L}}\times\hat{\bm{L}})_i
+&=
+\frac{1}{2}\epsilon_{ijk}\comm{\hat L_j}{\hat L_k}
+\\
+&=
+\ii\hbar\hat L_i.
+\end{align}
+Hence
+\begin{equation}
+\boxed{
+\hat{\bm{L}}\times\hat{\bm{L}}
+=
+\ii\hbar\hat{\bm{L}},
+}
+\label{eq:Lcross}
+\end{equation}
+but only under the stated ordering convention. Equation~\eqref{eq:Lcross} is a consequence of the Lie algebra in Eq.~\eqref{eq:Lalgebra}, not an identity for classical gradients.

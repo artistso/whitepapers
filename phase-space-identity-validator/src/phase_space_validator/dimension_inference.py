@@ -26,6 +26,13 @@ from .expressions import (
 _BASE_ORDER = ("M", "L", "T", "Q", "Theta")
 
 
+def _dimension_sort_key(symbol: str) -> tuple[int, str]:
+    try:
+        return (_BASE_ORDER.index(symbol), symbol)
+    except ValueError:
+        return (len(_BASE_ORDER), symbol)
+
+
 @dataclass(frozen=True)
 class Dimension:
     """Immutable sparse vector of base-dimension exponents."""
@@ -269,10 +276,3 @@ def check_equality_dimensions(
         consistent=consistent,
         code=None if consistent else "DIMENSION_MISMATCH",
     )
-
-
-def _dimension_sort_key(symbol: str) -> tuple[int, str]:
-    try:
-        return (_BASE_ORDER.index(symbol), symbol)
-    except ValueError:
-        return (len(_BASE_ORDER), symbol)

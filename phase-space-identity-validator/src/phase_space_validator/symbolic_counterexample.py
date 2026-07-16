@@ -18,8 +18,8 @@ from .expressions import (
     Power,
     Product,
     Sum,
-    Symbol as AstSymbol,
 )
+from .expressions import Symbol as AstSymbol
 
 
 class EvidenceLevel(StrEnum):
@@ -218,11 +218,14 @@ def falsify_equality(
     """Search for a witness that falsifies a supported universal operator equality."""
 
     operator, operator_on_left = _extract_zero_operator_claim(equality, context)
-    candidate_expressions = tuple(candidates or generate_bilinear_candidates(
-        context,
-        left_space=operator.left.space,
-        right_space=operator.right.space,
-    ))
+    candidate_expressions = tuple(
+        candidates
+        or generate_bilinear_candidates(
+            context,
+            left_space=operator.left.space,
+            right_space=operator.right.space,
+        )
+    )
 
     for tested, candidate in enumerate(candidate_expressions, start=1):
         witness = expression_to_sympy(candidate, context, path=f"$.candidates[{tested - 1}]")

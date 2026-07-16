@@ -1,0 +1,18 @@
+{
+  "type": "equality",
+  "left": {
+    "type": "cross_product",
+    "left": {
+      "type": "gradient",
+      "space": "x"
+    },
+    "right": {
+      "type": "gradient",
+      "space": "p"
+    }
+  },
+  "right": {
+    "type": "constant",
+    "value": 0
+  }
+}

@@ -1,6 +1,6 @@
 # Phase-Space Identity Validator
 
-A reproducible research package for checking the declared structural consistency of proposed identities in classical and quantum phase space.
+A reproducible research package for representing and checking proposed identities in classical and quantum phase space.
 
 The initial motivating example is the invalid ansatz
 
@@ -8,19 +8,23 @@ The initial motivating example is the invalid ansatz
 nabla_x cross nabla_p = hbar^2 / (2 pi)
 ```
 
-The validator rejects it because the two sides differ in tensor rank, physical dimensions, operator/value type, domain, and coordinate-invariance status.
+The metadata validator rejects it because the two sides differ in tensor rank, physical dimensions, operator/value type, domain, and coordinate-invariance status.
 
-> **Scope:** this tool is a consistency checker, not a theorem prover. Passing validation does not establish that an equation is mathematically or physically true.
+> **Scope:** this toolkit is a consistency checker, not a theorem prover. Parsing or passing validation does not establish that an equation is mathematically or physically true.
 
-## Checks in v0.1.0
+## Capabilities in v0.2.0
 
-- tensor rank;
-- dimension exponent maps;
-- operator versus value;
-- differential order;
-- intrinsic/covariant status;
-- domain compatibility;
-- distributional qualification.
+- strict controlled expression AST;
+- JSON round-trip normalization;
+- path-aware errors for malformed expression trees;
+- deterministic traversal, node counts, and tree depth;
+- tensor rank checks from declared metadata;
+- dimension exponent-map checks from declared metadata;
+- operator-versus-value checks;
+- differential-order diagnostics;
+- intrinsic/covariant status checks;
+- domain compatibility checks;
+- distributional qualification warnings.
 
 ## Quick start
 
@@ -31,10 +35,11 @@ python -m pip install -e '.[dev]'
 
 psiv examples/invalid-cross-gradient.json
 psiv examples/canonical-commutator.json --json
+psiv-ast examples/ast/invalid-cross-gradient-expression.json --summary
 pytest
 ```
 
-Expected invalid-example result:
+Expected invalid metadata result:
 
 ```text
 [FAIL] Mixed cross-gradient equals hbar squared over two pi
@@ -45,9 +50,49 @@ Expected invalid-example result:
 - ERROR DOMAIN_MISMATCH: ...
 ```
 
-## Identity specification
+## Controlled expression language
 
-Each side declares metadata explicitly:
+The expression layer represents syntax without silently assigning physical meaning. Supported nodes include:
+
+```text
+Symbol
+Constant
+Derivative
+Gradient
+CrossProduct
+TensorProduct
+WedgeProduct
+Commutator
+PoissonBracket
+Power
+Product
+Sum
+Equality
+```
+
+Example:
+
+```json
+{
+  "type": "equality",
+  "left": {
+    "type": "cross_product",
+    "left": {"type": "gradient", "space": "x"},
+    "right": {"type": "gradient", "space": "p"}
+  },
+  "right": {
+    "type": "power",
+    "base": {"type": "symbol", "name": "hbar"},
+    "exponent": 2
+  }
+}
+```
+
+The complete grammar is documented in `docs/EXPRESSION_AST.md`.
+
+## Metadata identity specification
+
+The existing validator accepts explicitly declared metadata:
 
 ```json
 {
@@ -77,10 +122,10 @@ Each side declares metadata explicitly:
 
 ```text
 phase-space-identity-validator/
-├── src/phase_space_validator/   # validation library and CLI
+├── src/phase_space_validator/   # AST, validation library, and CLIs
 ├── tests/                       # unit tests
-├── examples/                    # valid and invalid identity specifications
-├── docs/                        # mathematical scope and roadmap
+├── examples/                    # metadata and AST examples
+├── docs/                        # grammar, scope, and roadmap
 ├── manuscript/                  # modular technical-note source
 │   ├── sections/
 │   ├── phase_space_clarification.tex
@@ -91,7 +136,7 @@ phase-space-identity-validator/
 └── LICENSE.md
 ```
 
-The repository-level validator workflow runs Ruff and pytest under Python 3.11 and 3.12.
+The validator workflow runs Ruff and pytest under Python 3.11 and 3.12.
 
 ## Technical note
 
@@ -110,17 +155,6 @@ make
 
 The manuscript workflow compiles and verifies the PDF on GitHub Actions and uploads `phase-space-clarification-pdf` as a workflow artifact. Generated PDFs are not committed to the repository.
 
-## Mathematical foundation
-
-The accompanying research program distinguishes:
-
-- commuting mixed derivatives, `[partial_xi, partial_pj] = 0`;
-- the generally nonzero formal mixed cross-gradient;
-- the canonical Poisson bivector;
-- canonical operator and Moyal star commutators;
-- physical-space quantized circulation;
-- angular-momentum operator algebra.
-
 ## Roadmap
 
-The next research phases are controlled expression parsing, automatic dimension inference, tensor-index validation, symbolic counterexample generation, Jacobi identity checks, and catalogs for magnetic and Berry-curved phase spaces.
+The next research phases are automatic dimension inference over the AST, tensor-index validation, symbolic counterexample generation, Jacobi identity checks, and catalogs for magnetic and Berry-curved phase spaces.

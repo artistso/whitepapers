@@ -1,0 +1,22 @@
+{
+  "name": "Canonical commutation relation",
+  "lhs": {
+    "label": "[x_i, p_j]",
+    "rank": 2,
+    "dimensions": {"A": 1},
+    "is_operator": true,
+    "intrinsic": true,
+    "domain": "Hilbert-space operators"
+  },
+  "rhs": {
+    "label": "i hbar delta_ij I",
+    "rank": 2,
+    "dimensions": {"A": 1},
+    "is_operator": true,
+    "intrinsic": true,
+    "domain": "Hilbert-space operators"
+  },
+  "context": {
+    "require_intrinsic": true
+  }
+}

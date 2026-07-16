@@ -1,0 +1,24 @@
+{
+  "name": "Mixed cross-gradient equals hbar squared over two pi",
+  "lhs": {
+    "label": "nabla_x cross nabla_p",
+    "rank": 1,
+    "dimensions": {"A": -1},
+    "is_operator": true,
+    "differential_order": 2,
+    "intrinsic": false,
+    "domain": "canonical phase-space functions"
+  },
+  "rhs": {
+    "label": "hbar^2 / (2 pi)",
+    "rank": 0,
+    "dimensions": {"A": 2},
+    "is_operator": false,
+    "differential_order": 0,
+    "intrinsic": true,
+    "domain": "scalars"
+  },
+  "context": {
+    "require_intrinsic": true
+  }
+}

@@ -29,7 +29,17 @@ jobs:
         run: python -m pip install -e '.[dev]'
       - name: Lint
         working-directory: phase-space-identity-validator
-        run: ruff check .
+        run: |
+          set -o pipefail
+          ruff check . --output-format=concise 2>&1 | tee ruff-${{ matrix.python-version }}.txt
+      - name: Upload Ruff diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ruff-${{ matrix.python-version }}
+          path: phase-space-identity-validator/ruff-${{ matrix.python-version }}.txt
+          if-no-files-found: warn
+          retention-days: 7
       - name: Test
         working-directory: phase-space-identity-validator
         run: pytest --junitxml=pytest-${{ matrix.python-version }}.xml

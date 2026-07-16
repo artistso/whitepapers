@@ -122,7 +122,7 @@ def test_parsed_zero_claim_reaches_symbolic_falsifier() -> None:
     expression = parse_text_expression("nabla_x cross nabla_p = 0")
     assert isinstance(expression, Equality)
     result = falsify_equality(expression)
-    assert result.evidence is EvidenceLevel.COUNTEREXAMPLE
+    assert result.evidence_level is EvidenceLevel.COUNTEREXAMPLE
     assert result.witness == "p2*x1"
     assert result.residual == ("0", "0", "1")
 

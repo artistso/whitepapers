@@ -65,6 +65,14 @@ from .tensor_inference import (
     check_equality_tensors,
     signatures_compatible,
 )
+from .text_parser import (
+    TextParseError,
+    Token,
+    TokenKind,
+    load_text_expression,
+    parse_text_expression,
+    tokenize_text,
+)
 from .validator import validate_identity
 
 __all__ = [
@@ -111,6 +119,9 @@ __all__ = [
     "TensorRegistry",
     "TensorSignature",
     "TensorSymbolSpec",
+    "TextParseError",
+    "Token",
+    "TokenKind",
     "ValidationIssue",
     "ValidationReport",
     "WedgeProduct",
@@ -126,9 +137,12 @@ __all__ = [
     "generate_bilinear_candidates",
     "infer_dimension",
     "load_expression",
+    "load_text_expression",
+    "parse_text_expression",
     "signatures_compatible",
+    "tokenize_text",
     "validate_identity",
     "walk_expression",
 ]
 
-__version__ = "0.5.0"
+__version__ = "0.6.0"

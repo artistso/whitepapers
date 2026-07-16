@@ -1,0 +1,23 @@
+{
+  "type": "equality",
+  "left": {
+    "type": "product",
+    "factors": [
+      {
+        "type": "symbol",
+        "name": "delta",
+        "indices": ["^i", "_j"]
+      },
+      {
+        "type": "symbol",
+        "name": "x",
+        "indices": ["^j"]
+      }
+    ]
+  },
+  "right": {
+    "type": "symbol",
+    "name": "x",
+    "indices": ["^i"]
+  }
+}

@@ -31,7 +31,7 @@ class MathematicalObject:
     domain: str | None = None
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "MathematicalObject":
+    def from_dict(cls, data: dict[str, Any]) -> MathematicalObject:
         required = {"label", "rank"}
         missing = required - data.keys()
         if missing:
@@ -67,7 +67,7 @@ class ValidationContext:
     notes: tuple[str, ...] = ()
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any] | None) -> "ValidationContext":
+    def from_dict(cls, data: dict[str, Any] | None) -> ValidationContext:
         data = data or {}
         return cls(
             require_intrinsic=bool(data.get("require_intrinsic", True)),
@@ -88,7 +88,7 @@ class IdentitySpec:
     context: ValidationContext = field(default_factory=ValidationContext)
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "IdentitySpec":
+    def from_dict(cls, data: dict[str, Any]) -> IdentitySpec:
         missing = {"name", "lhs", "rhs"} - data.keys()
         if missing:
             raise ValueError(f"Missing identity fields: {', '.join(sorted(missing))}")

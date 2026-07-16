@@ -1,0 +1,88 @@
+\section{Diagnostic dictionary}
+
+Table~\ref{tab:dictionary} separates the objects most commonly conflated in this discussion.
+
+\begin{table}[ht]
+\centering
+\small
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.23\textwidth}
+                >{\raggedright\arraybackslash}p{0.30\textwidth}
+                >{\raggedright\arraybackslash}p{0.35\textwidth}}
+\toprule
+\textbf{Object} & \textbf{Correct statement} & \textbf{Meaning} \\
+\midrule
+Mixed derivative commutator
+& \(\comm{\partial_{x^i}}{\partial_{p_j}}=0\)
+& Independent smooth coordinate derivatives commute. \\
+Formal mixed cross-gradient
+& \(\epsilon_{ijk}\partial_{x^j}\partial_{p_k}\), generally nonzero
+& Coordinate-dependent second-order operator available only after special three-dimensional identifications. \\
+Poisson bivector
+& \(\Pi=\partial_{x^i}\wedge\partial_{p_i}\)
+& Intrinsic antisymmetric tensor defining Hamiltonian phase-space geometry. \\
+Canonical Poisson bracket
+& \(\pb{x^i}{p_j}=\delta^i{}_j\)
+& Classical relation between conjugate coordinate functions. \\
+Canonical commutator
+& \(\comm{\hat x^i}{\hat p_j}=\ii\hbar\delta^i{}_j\)
+& Quantum operator noncommutativity. \\
+Moyal star commutator
+& \(\starcomm{x^i}{p_j}=\ii\hbar\delta^i{}_j\)
+& Phase-space realization of quantum noncommutativity. \\
+Quantized circulation
+& \(\oint \bm{p}\cdot\dd\bm{\ell}=nh\)
+& Topological phase winding in a suitable quantum fluid. \\
+Angular-momentum algebra
+& \(\comm{\hat L_i}{\hat L_j}=\ii\hbar\epsilon_{ijk}\hat L_k\)
+& Lie algebra of rotation generators. \\
+\bottomrule
+\end{tabular}
+\caption{A separation of differential, geometric, quantum, and topological structures.}
+\label{tab:dictionary}
+\end{table}
+
+A compact consistency test for proposed phase-space identities is:
+\begin{enumerate}[label=\arabic*.]
+  \item \textbf{Domain:} Is the object defined on configuration space, momentum space, phase space, Hilbert space, or physical space?
+  \item \textbf{Type:} Is it a scalar, vector, covector, differential form, bivector, operator, or distribution?
+  \item \textbf{Dimension:} Do both sides carry identical physical units?
+  \item \textbf{Covariance:} Is the expression invariant under the relevant coordinate or canonical transformations?
+  \item \textbf{Ordering:} If operators do not commute, has the product ordering been defined?
+  \item \textbf{Regularity:} Are singularities, boundaries, and distributional terms included?
+  \item \textbf{Physical assumptions:} Are neutrality, gauge coupling, dimensionality, topology, and boundary conditions stated?
+\end{enumerate}
+
+\subsection{Correspondence with the reference validator}
+
+The accompanying Phase-Space Identity Validator implements a conservative subset of
+this checklist as stable diagnostics. Table~\ref{tab:validator-codes} records the
+correspondence between the motivating ansatz and the executable checks.
+
+\begin{table}[ht]
+\centering
+\small
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{>{\ttfamily\raggedright\arraybackslash}p{0.34\textwidth}
+                >{\raggedright\arraybackslash}p{0.54\textwidth}}
+\toprule
+\textbf{Diagnostic code} & \textbf{Detected inconsistency} \\
+\midrule
+TYPE\_RANK\_MISMATCH
+& A vector-valued differential construction is equated with a scalar. \\
+DIMENSION\_MISMATCH
+& The left-hand side has dimensions of inverse action, while the right-hand side has dimensions of action squared. \\
+OPERATOR\_VALUE\_MISMATCH
+& A second-order differential operator is equated directly with a numerical constant. \\
+NONINTRINSIC\_CONSTRUCTION
+& The formal cross product relies on a special three-dimensional identification rather than intrinsic phase-space geometry. \\
+DOMAIN\_MISMATCH
+& An operator on phase-space functions is equated with an element of the scalar field without an action or eigenvalue context. \\
+\bottomrule
+\end{tabular}
+\caption{Executable diagnostics associated with the motivating ansatz.}
+\label{tab:validator-codes}
+\end{table}
+
+A validator report is evidence of structural compatibility or incompatibility under
+declared assumptions. It is not a proof of a surviving identity.

@@ -7,7 +7,6 @@ from phase_space_validator.dimensions import dimensions_equal, format_dimensions
 from phase_space_validator.models import IdentitySpec
 from phase_space_validator.validator import validate_identity
 
-
 ROOT = Path(__file__).resolve().parents[1]
 
 

@@ -1,20 +1,20 @@
 # Phase-Space Identity Validator
 
-A reproducible research package for representing and checking proposed identities in classical and quantum phase space.
+A reproducible research package for parsing, representing, and checking proposed identities in classical and quantum phase space.
 
-The initial motivating example is the invalid ansatz
+The motivating invalid ansatz is
 
 ```text
-nabla_x cross nabla_p = hbar^2 / (2 pi)
+nabla_x cross nabla_p = hbar^2 / (2*pi)
 ```
 
-The toolkit rejects this identity through independent metadata, dimensional, and tensor-index analyses:
+The toolkit rejects it independently through:
 
-1. the metadata validator detects declared rank, operator/value, domain, covariance, and dimension mismatches;
-2. the AST dimension engine derives inverse action on the left and action squared on the right;
-3. the tensor engine derives a rank-one left side and scalar right side and identifies that `nabla_x` and `nabla_p` belong to different coordinate spaces.
+1. declared metadata checks;
+2. automatic physical-dimension inference;
+3. tensor-rank and vector-space inference.
 
-It also symbolically disproves the related universal claim
+It also disproves the related universal claim
 
 ```text
 nabla_x cross nabla_p = 0
@@ -22,10 +22,12 @@ nabla_x cross nabla_p = 0
 
 by finding the witness `x1*p2`, for which the operator returns `(0, 0, 1)`.
 
-> **Scope:** this toolkit is a consistency checker and counterexample search system, not a theorem prover. Parsing, passing validation, or failing to find a counterexample does not establish that an equation is mathematically or physically true.
+> **Scope:** this toolkit is a parser, consistency checker, and finite counterexample search system—not a theorem prover. Successful parsing, structural consistency, or failure to find a witness does not prove an identity.
 
-## Capabilities in v0.5.0
+## Capabilities in v0.6.0
 
+- bounded human-readable mathematical text parser;
+- position-aware tokenization and parse errors;
 - strict controlled expression AST;
 - recursive physical-dimension inference;
 - tensor-rank and free-index inference;
@@ -45,32 +47,49 @@ python -m venv .venv
 source .venv/bin/activate
 python -m pip install -e '.[dev]'
 
-psiv examples/invalid-cross-gradient.json
-psiv-ast examples/ast/invalid-cross-gradient-expression.json --summary
-psiv-dim examples/ast/invalid-cross-gradient-expression.json
-psiv-tensor examples/ast/invalid-cross-gradient-expression.json
+psiv-parse --text "nabla_x cross nabla_p = hbar^2/(2*pi)" --summary
+psiv-parse --file examples/text/canonical-commutator.txt
 psiv-check examples/ast/invalid-cross-gradient-expression.json
 psiv-falsify examples/ast/cross-gradient-zero-expression.json
 pytest
 ```
 
-The combined checker reports at least:
+The parser emits canonical AST JSON. The same text fixture can then be compared with the version-controlled AST examples.
+
+## Controlled text examples
+
+```text
+nabla_x cross nabla_p = hbar^2/(2*pi)
+[x_i,p_j] = i*hbar*delta_ij*I
+delta^i_j*x^j = x^i
+{x_i,p_j} = delta_ij
+partial(x^3,x,2)
+nabla_x(x^2)
+```
+
+The text layer requires explicit multiplication. For example, `2*pi` is valid while `2 pi` returns `EXPLICIT_MULTIPLICATION_REQUIRED`.
+
+Compact index syntax is supported:
+
+```text
+_i       covariant
+^i       contravariant
+delta_ij two compact covariant indices
+T^{mu}   one multi-character contravariant index
+```
+
+Numeric superscripts are powers, so `hbar^2` becomes a `Power` node rather than an index.
+
+The complete grammar and exclusions are documented in `docs/TEXT_PARSER.md`.
+
+## Structural diagnostics
+
+The motivating ansatz produces at least:
 
 ```text
 DIMENSION_MISMATCH
 TYPE_RANK_MISMATCH
 CROSS_PRODUCT_SPACE_MISMATCH
-```
-
-The falsifier reports:
-
-```text
-[COUNTEREXAMPLE] universal claim falsified
-- witness:      p2*x1
-- left action:  ('0', '0', '1')
-- right action: ('0', '0', '0')
-- residual:     ('0', '0', '1')
-- tested:       2 candidate(s)
 ```
 
 The canonical commutator passes dimension and tensor checks:
@@ -82,7 +101,7 @@ psiv-check examples/ast/canonical-commutator-expression.json
 The Kronecker example verifies
 
 ```text
-delta^i_j x^j = x^i
+delta^i_j*x^j = x^i
 ```
 
 with:
@@ -91,66 +110,49 @@ with:
 psiv-check examples/ast/kronecker-contraction-expression.json
 ```
 
-## Controlled expression language
-
-The expression layer represents syntax without silently assigning physical meaning. Supported nodes include symbols, constants, derivatives, gradients, cross products, tensor products, wedge products, commutators, Poisson brackets, powers, products, sums, and equalities.
-
-The complete grammar is documented in `docs/EXPRESSION_AST.md`.
-
-## Dimension inference
-
-The default registry assigns:
-
-```text
-x       -> L
-p       -> M L T^-1
-hbar    -> M L^2 T^-1
-nabla_x -> L^-1
-nabla_p -> M^-1 L^-1 T
-```
-
-The complete rules are documented in `docs/DIMENSION_INFERENCE.md`.
-
-## Tensor and index inference
-
-Indices use compact tokens:
-
-```text
-_i   covariant
-^i   contravariant
-i    covariant legacy form
-```
-
-A repeated index contracts only when it appears exactly twice in the same vector space with opposite variance. The complete rules are documented in `docs/TENSOR_INFERENCE.md`.
-
 ## Symbolic counterexamples
 
-The v0.5 falsifier supports universal mixed cross-gradient claims against zero. It searches the nine deterministic bilinear witnesses `x_i p_j` and uses exact symbolic differentiation. A found witness disproves the claim; `NO_COUNTEREXAMPLE_FOUND` means only that the configured finite search space was exhausted.
+The falsifier searches deterministic bilinear witnesses `x_i p_j` using exact differentiation. A found witness disproves a universal claim; `NO_COUNTEREXAMPLE_FOUND` means only that the configured finite search space was exhausted.
 
-The full scope and evidence semantics are documented in `docs/SYMBOLIC_COUNTEREXAMPLES.md`.
+```bash
+psiv-falsify examples/ast/cross-gradient-zero-expression.json
+```
 
-## Metadata validation
-
-The original metadata validator remains available for properties not yet inferred from syntax alone:
+Expected evidence:
 
 ```text
-TYPE_RANK_MISMATCH
-DIMENSION_MISMATCH
-OPERATOR_VALUE_MISMATCH
-DIFFERENTIAL_ORDER_MISMATCH
-NONINTRINSIC_CONSTRUCTION
-DOMAIN_MISMATCH
-DISTRIBUTIONAL_QUALIFICATION
+[COUNTEREXAMPLE] universal claim falsified
+- witness:      p2*x1
+- left action:  ('0', '0', '1')
+- right action: ('0', '0', '0')
+- residual:     ('0', '0', '1')
+- tested:       2 candidate(s)
 ```
+
+The evidence model is documented in `docs/SYMBOLIC_COUNTEREXAMPLES.md`.
+
+## Commands
+
+| Command | Purpose |
+|---|---|
+| `psiv` | Validate explicitly declared metadata |
+| `psiv-parse` | Parse controlled text into canonical AST JSON |
+| `psiv-ast` | Normalize and inspect AST JSON |
+| `psiv-dim` | Infer and compare physical dimensions |
+| `psiv-tensor` | Infer rank and free indices |
+| `psiv-check` | Combine dimension and tensor checks |
+| `psiv-falsify` | Search for symbolic counterexamples |
 
 ## Repository layout
 
 ```text
 phase-space-identity-validator/
-├── src/phase_space_validator/   # AST, inference, falsification, validation, and CLIs
-├── tests/                       # unit tests
-├── examples/                    # metadata and AST examples
-├── docs/                        # grammar, inference, falsification, scope, and roadmap
+├── src/phase_space_validator/   # parser, AST, inference, falsification, validation, CLIs
+├── tests/                       # unit and command-line tests
+├── examples/
+│   ├── ast/                     # canonical JSON fixtures
+│   └── text/                    # human-readable equivalents
+├── docs/                        # grammar, inference, evidence, scope, roadmap
 ├── manuscript/                  # modular technical-note source
 │   ├── sections/
 │   ├── phase_space_clarification.tex
@@ -169,7 +171,7 @@ The accompanying paper is:
 
 > **Mixed Derivatives in Phase Space: Poisson Geometry, Quantum Commutators, and Quantized Circulation**
 
-It formalizes the distinction between commuting mixed derivatives, the generally nonzero formal mixed cross-gradient, Poisson geometry, quantum commutators, and quantized circulation.
+It distinguishes commuting mixed derivatives, the generally nonzero formal mixed cross-gradient, Poisson geometry, quantum commutators, and quantized circulation.
 
 Build it locally with:
 
@@ -182,4 +184,4 @@ The manuscript workflow compiles and verifies the PDF on GitHub Actions and uplo
 
 ## Roadmap
 
-The next research phases are a controlled text/LaTeX front end, broader polynomial witness generation, metric-aware index operations, Jacobi identity checks, and catalogs for magnetic and Berry-curved phase spaces.
+The next research phase is a unified, versioned diagnostic and evidence report. Later milestones include a benchmark corpus, broader witness generation, metric-aware index operations, Jacobi checks, and magnetic and Berry-curved phase-space profiles.

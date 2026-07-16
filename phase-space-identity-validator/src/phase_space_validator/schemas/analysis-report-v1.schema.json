@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artistso.github.io/whitepapers/schemas/analysis-report-v1.schema.json",
+  "title": "Phase-Space Identity Validator Analysis Report v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "tool_version",
+    "input",
+    "parse",
+    "ast",
+    "dimensions",
+    "tensor_analysis",
+    "symbolic_evidence",
+    "metadata",
+    "diagnostics",
+    "assumptions",
+    "overall_status",
+    "exit_code"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "tool_version": {"type": "string", "minLength": 1},
+    "input": {"$ref": "#/$defs/input"},
+    "parse": {"$ref": "#/$defs/parseSection"},
+    "ast": {"type": ["object", "null"]},
+    "dimensions": {"$ref": "#/$defs/analysisSection"},
+    "tensor_analysis": {"$ref": "#/$defs/analysisSection"},
+    "symbolic_evidence": {"$ref": "#/$defs/analysisSection"},
+    "metadata": {"$ref": "#/$defs/metadataSection"},
+    "diagnostics": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/diagnostic"}
+    },
+    "assumptions": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1}
+    },
+    "overall_status": {
+      "enum": [
+        "input_error",
+        "invalid",
+        "no_inconsistency_found",
+        "inconclusive"
+      ]
+    },
+    "exit_code": {"enum": [0, 1, 2, 3, 4]}
+  },
+  "$defs": {
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "source_name", "text", "character_count"],
+      "properties": {
+        "kind": {"const": "text"},
+        "source_name": {"type": "string", "minLength": 1},
+        "text": {"type": "string"},
+        "character_count": {"type": "integer", "minimum": 0}
+      }
+    },
+    "parseSection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "properties": {
+        "status": {"enum": ["passed", "failed"]},
+        "root_type": {"type": ["string", "null"]},
+        "relation": {"type": ["string", "null"]},
+        "error": {"type": "object"}
+      }
+    },
+    "analysisSection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "report"],
+      "properties": {
+        "status": {
+          "enum": [
+            "not_run",
+            "passed",
+            "failed",
+            "inconclusive",
+            "counterexample",
+            "no_counterexample_found"
+          ]
+        },
+        "report": {"type": ["object", "null"]},
+        "error": {"type": ["object", "null"]}
+      }
+    },
+    "metadataSection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "properties": {
+        "status": {"enum": ["not_provided", "provided"]}
+      }
+    },
+    "diagnostic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "severity",
+        "message",
+        "stage",
+        "evidence",
+        "path",
+        "span"
+      ],
+      "properties": {
+        "code": {"type": "string", "minLength": 1},
+        "severity": {"enum": ["error", "warning", "information"]},
+        "message": {"type": "string", "minLength": 1},
+        "stage": {
+          "enum": ["parse", "contract", "dimensions", "tensor", "symbolic", "metadata"]
+        },
+        "evidence": {
+          "enum": ["declared", "inferred", "computed", "counterexample", "inconclusive"]
+        },
+        "path": {"type": "string", "minLength": 1},
+        "span": {"$ref": "#/$defs/span"}
+      }
+    },
+    "span": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start", "end"],
+      "properties": {
+        "start": {"$ref": "#/$defs/position"},
+        "end": {"$ref": "#/$defs/position"}
+      }
+    },
+    "position": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["offset", "line", "column"],
+      "properties": {
+        "offset": {"type": "integer", "minimum": 0},
+        "line": {"type": "integer", "minimum": 1},
+        "column": {"type": "integer", "minimum": 1}
+      }
+    }
+  }
+}

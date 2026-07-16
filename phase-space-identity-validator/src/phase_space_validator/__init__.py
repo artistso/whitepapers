@@ -1,5 +1,20 @@
 """Phase-Space Identity Validator public API."""
 
+from .analysis_report import (
+    REPORT_DIAGNOSTIC_CODES_V1,
+    REPORT_SCHEMA_VERSION,
+    REPORT_TOOL_VERSION,
+    AnalysisDiagnostic,
+    AnalysisExitCode,
+    AnalysisReport,
+    DiagnosticSeverity,
+    OverallStatus,
+    ReportEvidenceLevel,
+    SourcePosition,
+    SourceSpan,
+    analyze_text_identity,
+    format_analysis_report,
+)
 from .dimension_inference import (
     ACTION,
     DEFAULT_REGISTRY,
@@ -38,6 +53,7 @@ from .expressions import (
     walk_expression,
 )
 from .models import IdentitySpec, MathematicalObject, ValidationIssue, ValidationReport
+from .report_schema import load_analysis_report_schema
 from .symbolic_counterexample import (
     DEFAULT_SYMBOLIC_CONTEXT,
     CounterexampleResult,
@@ -85,12 +101,19 @@ __all__ = [
     "LENGTH",
     "MASS",
     "MOMENTUM",
+    "REPORT_DIAGNOSTIC_CODES_V1",
+    "REPORT_SCHEMA_VERSION",
+    "REPORT_TOOL_VERSION",
     "TIME",
+    "AnalysisDiagnostic",
+    "AnalysisExitCode",
+    "AnalysisReport",
     "Commutator",
     "Constant",
     "CounterexampleResult",
     "CrossProduct",
     "Derivative",
+    "DiagnosticSeverity",
     "Dimension",
     "DimensionCheckReport",
     "DimensionInferenceError",
@@ -103,9 +126,13 @@ __all__ = [
     "IdentitySpec",
     "IndexVariance",
     "MathematicalObject",
+    "OverallStatus",
     "PoissonBracket",
     "Power",
     "Product",
+    "ReportEvidenceLevel",
+    "SourcePosition",
+    "SourceSpan",
     "Sum",
     "Symbol",
     "SymbolicContext",
@@ -126,6 +153,7 @@ __all__ = [
     "ValidationReport",
     "WedgeProduct",
     "analyze_tensor",
+    "analyze_text_identity",
     "apply_mixed_cross_gradient",
     "check_equality_dimensions",
     "check_equality_tensors",
@@ -134,8 +162,10 @@ __all__ = [
     "expression_from_json",
     "expression_to_sympy",
     "falsify_equality",
+    "format_analysis_report",
     "generate_bilinear_candidates",
     "infer_dimension",
+    "load_analysis_report_schema",
     "load_expression",
     "load_text_expression",
     "parse_text_expression",
@@ -145,4 +175,4 @@ __all__ = [
     "walk_expression",
 ]
 
-__version__ = "0.6.0"
+__version__ = "0.7.0"

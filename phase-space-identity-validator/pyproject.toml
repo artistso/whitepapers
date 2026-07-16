@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "phase-space-identity-validator"
-version = "0.6.0"
-description = "A controlled text, expression, dimension, tensor-index, symbolic falsification, and structural validation toolkit for phase-space identities."
+version = "0.7.0"
+description = "A controlled text, expression, versioned reporting, dimension, tensor-index, symbolic falsification, and structural validation toolkit for phase-space identities."
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = ["sympy>=1.14,<2"]
@@ -23,10 +23,11 @@ classifiers = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8.2", "ruff>=0.5"]
+dev = ["jsonschema>=4.23", "pytest>=8.2", "ruff>=0.5"]
 
 [project.scripts]
 psiv = "phase_space_validator.cli:main"
+psiv-analyze = "phase_space_validator.analysis_cli:main"
 psiv-ast = "phase_space_validator.ast_cli:main"
 psiv-check = "phase_space_validator.check_cli:main"
 psiv-dim = "phase_space_validator.dimension_cli:main"
@@ -36,6 +37,9 @@ psiv-tensor = "phase_space_validator.tensor_cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+phase_space_validator = ["schemas/*.json"]
 
 [tool.pytest.ini_options]
 addopts = "-q"

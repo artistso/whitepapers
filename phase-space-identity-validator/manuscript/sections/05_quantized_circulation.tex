@@ -1,0 +1,44 @@
+\section{A separate physical-space phenomenon: quantized circulation}
+
+Let a neutral condensate order parameter be written as \cite{Tsubota}
+\begin{equation}
+\psi(\bm{r})=\sqrt{\rho(\bm{r})}\,e^{\ii S(\bm{r})},
+\end{equation}
+where \(S\) is a dimensionless phase. Away from zeros of \(\psi\), the mechanical momentum per constituent is
+\begin{equation}
+\bm{p}=m\bm{v}=\hbar\nabla S.
+\label{eq:phase-momentum}
+\end{equation}
+Single-valuedness of the order parameter implies
+\begin{equation}
+\Delta S=2\pi n,
+\qquad n\in\mathbb{Z},
+\end{equation}
+and therefore
+\begin{equation}
+\boxed{
+\oint_C \bm{p}\cdot\dd\bm{\ell}
+=2\pi n\hbar
+=nh.
+}
+\label{eq:circulation}
+\end{equation}
+Equivalently, the velocity circulation is \(nh/m\).
+
+For an ideal straight vortex line, viewed in a two-dimensional transverse cross-section with core position \(\bm{r}_0\), Eq.~\eqref{eq:circulation} may be represented distributionally as
+\begin{equation}
+\boxed{
+\nabla\times\bm{p}
+=nh\,\delta^{(2)}(\bm{r}-\bm{r}_0)\,\hat{\bm{n}}.
+}
+\label{eq:vorticity}
+\end{equation}
+This formula is singular, topological, and system-dependent. It is not a uniform curl identity and does not concern the mixed derivatives \(\partial_x\) and \(\partial_p\) on phase space.
+
+For a charged condensate, the gauge-invariant mechanical momentum takes the form
+\begin{equation}
+\bm{p}_{\mathrm{mech}}
+=
+\hbar\nabla S-q\bm{A},
+\end{equation}
+so the curl also contains the magnetic contribution \(-q\bm{B}\). This qualification prevents the neutral-superfluid formula from being applied outside its domain.

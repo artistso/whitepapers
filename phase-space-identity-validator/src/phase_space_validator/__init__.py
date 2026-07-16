@@ -1,5 +1,20 @@
 """Phase-Space Identity Validator public API."""
 
+from .dimension_inference import (
+    ACTION,
+    DEFAULT_REGISTRY,
+    INVERSE_ACTION,
+    LENGTH,
+    MASS,
+    MOMENTUM,
+    TIME,
+    Dimension,
+    DimensionCheckReport,
+    DimensionInferenceError,
+    DimensionRegistry,
+    check_equality_dimensions,
+    infer_dimension,
+)
 from .expressions import (
     Commutator,
     Constant,
@@ -26,10 +41,21 @@ from .models import IdentitySpec, MathematicalObject, ValidationIssue, Validatio
 from .validator import validate_identity
 
 __all__ = [
+    "ACTION",
+    "DEFAULT_REGISTRY",
+    "INVERSE_ACTION",
+    "LENGTH",
+    "MASS",
+    "MOMENTUM",
+    "TIME",
     "Commutator",
     "Constant",
     "CrossProduct",
     "Derivative",
+    "Dimension",
+    "DimensionCheckReport",
+    "DimensionInferenceError",
+    "DimensionRegistry",
     "Equality",
     "Expression",
     "ExpressionParseError",
@@ -45,12 +71,14 @@ __all__ = [
     "ValidationIssue",
     "ValidationReport",
     "WedgeProduct",
+    "check_equality_dimensions",
     "expression_depth",
     "expression_from_dict",
     "expression_from_json",
+    "infer_dimension",
     "load_expression",
     "validate_identity",
     "walk_expression",
 ]
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"

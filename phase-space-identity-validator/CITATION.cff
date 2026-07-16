@@ -5,12 +5,14 @@ type: software
 authors:
   - family-names: Owens
     given-names: Lovely
-version: 0.5.0
-date-released: 2026-07-15
+version: 0.6.0
+date-released: 2026-07-16
 license: MIT
 repository-code: https://github.com/artistso/whitepapers
 keywords:
   - phase space
+  - controlled text parser
+  - mathematical expression parsing
   - expression AST
   - dimension inference
   - tensor inference

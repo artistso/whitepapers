@@ -2,7 +2,9 @@
 
 The validator is a **structural consistency checker**, not a theorem prover.
 
-It can currently detect declared mismatches in:
+## Implemented layers
+
+The metadata validator can detect declared mismatches in:
 
 1. tensor rank;
 2. physical dimensions;
@@ -12,17 +14,23 @@ It can currently detect declared mismatches in:
 6. mathematical domain;
 7. distributional qualification.
 
-It does not yet parse arbitrary LaTeX, infer metadata automatically, establish operator domains, test Jacobi identities, or prove equality. A passing report means only that the supplied metadata is structurally compatible.
+The controlled expression layer can represent and normalize a strict grammar containing symbols, constants, derivatives, gradients, products, sums, powers, commutators, Poisson brackets, wedge products, tensor products, cross products, and equalities.
+
+A parsed expression is syntax, not a proof and not yet a physical interpretation.
+
+## Current limits
+
+The toolkit does not yet parse arbitrary LaTeX, infer dimensions or tensor metadata automatically, establish operator domains, test Jacobi identities, or prove equality. A passing metadata report means only that the supplied declarations are structurally compatible.
 
 ## Canonical dimension symbols
 
-The examples use `A` for action. Future releases may support a configurable basis such as mass `M`, length `L`, time `T`, charge `Q`, and temperature `Theta`.
+The metadata examples use `A` for action. The dimension-inference release will use a configurable basis such as mass `M`, length `L`, time `T`, charge `Q`, and temperature `Theta`.
 
 ## Research roadmap
 
-- LaTeX-to-AST parsing for a controlled expression grammar.
-- Dimension inference and simplification.
+- Dimension inference and simplification over the controlled AST.
 - Tensor-index variance and contraction checks.
+- A controlled text or LaTeX front end that emits the AST.
 - Poisson/Jacobi identity verification.
 - SymPy integration for symbolic counterexamples.
 - Distributional equality annotations.

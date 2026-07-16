@@ -14,21 +14,30 @@ The metadata validator can detect declared mismatches in:
 6. mathematical domain;
 7. distributional qualification.
 
-The controlled expression layer can represent and normalize a strict grammar containing symbols, constants, derivatives, gradients, products, sums, powers, commutators, Poisson brackets, wedge products, tensor products, cross products, and equalities.
+The controlled expression layer represents and normalizes symbols, constants, derivatives, gradients, products, sums, powers, commutators, Poisson brackets, wedge products, tensor products, cross products, and equalities.
 
-A parsed expression is syntax, not a proof and not yet a physical interpretation.
+The dimension layer recursively infers base-dimension exponent vectors for the controlled AST. It supports configurable symbol and coordinate registries, canonical Poisson scaling, equality comparisons, and path-aware failures for unknown symbols, unknown coordinates, and incompatible sums.
+
+A parsed or dimensionally consistent expression is not a proof.
 
 ## Current limits
 
-The toolkit does not yet parse arbitrary LaTeX, infer dimensions or tensor metadata automatically, establish operator domains, test Jacobi identities, or prove equality. A passing metadata report means only that the supplied declarations are structurally compatible.
+The toolkit does not yet parse arbitrary LaTeX, infer tensor index variance, establish operator domains, test Jacobi identities, or prove equality. Dimension compatibility is necessary but not sufficient for a valid physical identity.
 
-## Canonical dimension symbols
+## Canonical dimension basis
 
-The metadata examples use `A` for action. The dimension-inference release will use a configurable basis such as mass `M`, length `L`, time `T`, charge `Q`, and temperature `Theta`.
+The default registry uses mass `M`, length `L`, and time `T`:
+
+```text
+x    -> L
+p    -> M L T^-1
+hbar -> M L^2 T^-1
+```
+
+Additional registries may introduce charge `Q`, temperature `Theta`, or system-specific dimensions.
 
 ## Research roadmap
 
-- Dimension inference and simplification over the controlled AST.
 - Tensor-index variance and contraction checks.
 - A controlled text or LaTeX front end that emits the AST.
 - Poisson/Jacobi identity verification.

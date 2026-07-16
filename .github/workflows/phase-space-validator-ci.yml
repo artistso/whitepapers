@@ -10,6 +10,9 @@ on:
       - "phase-space-identity-validator/**"
       - ".github/workflows/phase-space-validator-ci.yml"
 
+permissions:
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -29,4 +32,12 @@ jobs:
         run: ruff check .
       - name: Test
         working-directory: phase-space-identity-validator
-        run: pytest
+        run: pytest --junitxml=pytest-${{ matrix.python-version }}.xml
+      - name: Upload pytest diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-${{ matrix.python-version }}
+          path: phase-space-identity-validator/pytest-${{ matrix.python-version }}.xml
+          if-no-files-found: warn
+          retention-days: 7

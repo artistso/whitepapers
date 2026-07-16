@@ -66,9 +66,9 @@ from .tensor_inference import (
     signatures_compatible,
 )
 from .text_parser import (
+    TextParseError,
     Token,
     TokenKind,
-    TextParseError,
     load_text_expression,
     parse_text_expression,
     tokenize_text,
